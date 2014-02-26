@@ -1,4 +1,4 @@
-# Windows Programming Laboratory Work #1
+# Windows Programming Laboratory Work
 
 # Laboratories Repository
 
