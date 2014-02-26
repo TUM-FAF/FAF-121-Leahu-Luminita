@@ -78,6 +78,11 @@
      - By clicking `CLOSE` button a MessageBox appears
      ```MessageBox(hwnd, "Press QUIT button", " Attention!", MB_OK);```
 
+So, here is the output of my application
+
+![Result](https://raw.github.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%231/photo.png)
+
+
 ## Programming Style Guide
 
 **Naming**
