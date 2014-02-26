@@ -56,13 +56,12 @@
   - **Make elements to interact or change other elements (1 pt for 2 different interactions)**
   
      The interactions are:
-     1. By clicking the ```INPUT``` button, text from firs input window is send to second one.
-     2. By clicking the ```CLEAR``` button, all text from second input window is erased.
-     3. By clicking the   ``FONT`` buttons (`FORTE` , `ARIAL` , `COURIER`), the text font is changed.
+     - By clicking the ```INPUT``` button, text from firs input window is send to second one.
+     - By clicking the ```CLEAR``` button, all text from second input window is erased.
+     - By clicking the   ``FONT`` buttons (`FORTE` , `ARIAL` , `COURIER`), the text font is changed.
 
      All are done using ```SendMessage();``` function in ```WM_COMMAND```
-
-     4. By clicking the ```QUIT``` button, the user exit from program.
+     - By clicking the ```QUIT``` button, the user exit from program.
 
      Is implementing using ```DestroyWindow(hwnd);``` function.
   - **Change behavior of different window actions (at least 3).**
