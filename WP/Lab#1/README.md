@@ -104,9 +104,9 @@
 
 **Spaces**
 
- Usualy are used some white spaces, like:
+ Usually are used some white spaces, like:
  
- ``` DefWindowProc (hwnd, message, wParam, lParam);``` or ```cxChar = LOWORD(lParam);```
+ ``` DefWindowProc(hwnd, message, wParam, lParam);``` or ```cxChar = LOWORD(lParam);```
 
 ## Conclusion
    
