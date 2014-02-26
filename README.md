@@ -1,4 +1,3 @@
-# Windows Programming Laboratory Work
 
 # Laboratories Repository
 
@@ -12,6 +11,6 @@
 
 ##Contained courses
 
-WP
-IDE
+ - WP
+ - IDE
 
