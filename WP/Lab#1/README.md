@@ -16,18 +16,18 @@
 
 ###During this laboratory work I executed the following Mandatory Tasks:
 
-    - **Create a Windows application**
+    **Create a Windows application**
       In order to do this I used function ```CreateWindowEx ``` with size : 400 x 348 and name : Lab#1::Editor.
-    - **Add 2 buttons to window: one with default styles, one with custom styles (font family)**
+    **Add 2 buttons to window: one with default styles, one with custom styles (font family)**
       To change font family of button I used 
       ```CreateFont(0 , 0, 0, 0, FW_DONTCARE, false, false, false,
                     DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                     DEFAULT_QUALITY, FF_DONTCARE, "Courier");```
       function with default parameters, which creates ```Courier``` font. In order to send it to specific button function
       ```SendMessage(hwnd_courier, WM_SETFONT, WPARAM(font_courier), TRUE); ``` is used.
-    - **Add 2 text inputs to window: one with default styles, one with custom styles (background)**
+    **Add 2 text inputs to window: one with default styles, one with custom styles (background)**
       I used ```WM_CTLCOLOREDIT``` case and ```CreateSolidBrush`` to change background color of text input. 
-    - **Add 2 text elements to window: one with default styles, one with custom styles (text color, font family)***
+    **Add 2 text elements to window: one with default styles, one with custom styles (text color, font family)***
       In order to do this I used 4 functions:
       ```CreateFont();```                                                              - to create font
       ```(HFONT)SelectObject(hdc, font_forte);```                                      - set the font to text element
