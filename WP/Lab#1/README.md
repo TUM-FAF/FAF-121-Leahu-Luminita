@@ -80,7 +80,7 @@
 
 So, here is the output of my application
 
-![Result](https://github.com/TUM-FAF/FAF-121-Leahu-Luminita/blob/master/WP/Lab%231/photo.png)
+![Result](https://raw.github.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%231/photo.png)
 
 
 ## Programming Style Guide
