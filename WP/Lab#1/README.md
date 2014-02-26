@@ -19,7 +19,7 @@
 
    - **Create a Windows application:**
     
-      In order to do this I used function `CreateWindowEx` with size : 400 x 348 and name : Lab#1::Editor.
+      In order to do this I used function `CreateWindowEx();` The window has size : 400 x 348 and name : Lab#1::Editor.
    - **Add 2 buttons to window: one with default styles, one with custom styles (font family)**
    
       To change font family of button I used 
