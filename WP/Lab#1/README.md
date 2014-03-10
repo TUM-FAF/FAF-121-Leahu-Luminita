@@ -23,13 +23,14 @@
    - **Add 2 buttons to window: one with default styles, one with custom styles (font family)**
    
       To change font family of button I used 
-
-      ``` CreateFont(0 , 0, 0, 0, FW_DONTCARE, false, false, false,
-                    DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                    DEFAULT_QUALITY, FF_DONTCARE, "Courier"); ```
+      ```
+      CreateFont(0 , 0, 0, 0, FW_DONTCARE, false, false, false,
+                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                 DEFAULT_QUALITY, FF_DONTCARE, "Courier"); 
+      ```
                     
       function with default parameters, which creates ```Courier``` font. 
-      In order to send it to specific button function
+      In order to send it to specific button, function
       
       ```SendMessage(hwnd_courier, WM_SETFONT, WPARAM(font_courier), TRUE); ```  is used.
    - **Add 2 text inputs to window: one with default styles, one with custom styles (background)**
@@ -71,10 +72,13 @@
      - By clicking ```MINIMIZE``` button the window change its position
        `SetWindowPos(hwnd, HWND_TOP, 20, 20, 700, 700, SWP_SHOWWINDOW);`
      - By clicking `MAXIMIZE` button a `MessageBox` appears and if the `YES` button is clicked the window also change its position
-        `if (MessageBox(hwnd, "Do you want to resize the window?", "Attention!", MB_YESNO) == IDYES)`
+     ```
+     
+     if (MessageBox(hwnd, "Do you want to resize the window?", "Attention!", MB_YESNO) == IDYES)
          {
-            `SetWindowPos(hwnd, HWND_TOP, 500, 200, 550, 400, SWP_SHOWWINDOW); `
+            SetWindowPos(hwnd, HWND_TOP, 500, 200, 550, 400, SWP_SHOWWINDOW);
          }
+     ```
      - By clicking `CLOSE` button a MessageBox appears
      ```MessageBox(hwnd, "Press QUIT button", " Attention!", MB_OK);```
 
