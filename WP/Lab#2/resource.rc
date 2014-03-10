@@ -1,0 +1,33 @@
+#include "resource.h"
+#include "afxres.h"
+//Icon location
+IDI_ICON  ICON DISCARDABLE "icon.ico"
+//Cursor location
+IDI_CURSOR CURSOR DISCARDABLE "mouse.cur"
+//Menu
+IDI_MENU MENU DISCARDABLE
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Exit",           IDI_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&RED",            IDI_RED
+        MENUITEM "&WHITE",          IDI_WHITE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About",           IDI_ABOUT
+    END
+END
+//Dialog box
+IDI_DIALOG DIALOG DISCARDABLE 32,32,180,100
+STYLE DS_MODALFRAME | WS_POPUP
+FONT 10 , "Forte"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,60,80,50,14
+    ICON            IDI_ICON,IDC_STATIC,60,20,30,50
+    CTEXT           "About",IDC_STATIC,40,10,100,8
+END
+

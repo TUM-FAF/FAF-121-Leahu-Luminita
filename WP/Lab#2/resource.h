@@ -1,0 +1,15 @@
+#define IDI_ICON  101
+#define IDI_CURSOR 102
+#define IDI_MENU 103
+#define IDI_EXIT 104
+#define IDI_RED 105
+#define IDI_WHITE 106
+#define IDI_ABOUT 107
+#define IDI_DIALOG 108
+#define IDC_STATIC 109
+#define SCROLLBAR_1 111
+#define SCROLLBAR_2 112
+#define SCROLLBAR_3 113
+#define BUTTON_LISTBOX 110
+#define BUTTON_STATIC 120
+#define Color RGB(210, 50, 123)
