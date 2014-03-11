@@ -1,6 +1,10 @@
 #include <windows.h>
+#include <stdio.h>
 #include <commdlg.h>
+#include <iostream>
 #include "resource.h"
+
+using namespace std;
 
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 //ScrollProcedure(HWND, UINT, WPARAM, LPARAM);
@@ -11,6 +15,17 @@ WNDPROC OldScroll[3];
 
 /*  Make the class name into a global variable  */
 char szClassName[ ] = "CodeBlocksWindowsApp";
+
+static char buffer[100];
+
+Labs tasks [6] = {
+    "1.Laboratory work #1 CO", "DL: 16 March",
+    "2.Laboratory work #1 WP", "DL: 25 February",
+    "3.Laboratory work #1 CA", "DL: 19 March",
+    "4.Laboratory work #1 CG", "DL: 21 March",
+    "5.Laboratory work #1 IDE","DL: 29 March",
+    "6.Laboratory work #2 WP" ,"DL: 11 March"};
+
 
 int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszArgument, int nCmdShow)
 {
@@ -79,10 +94,10 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     static HWND hwnd_listbox;
     static COLORREF crPrim[3] = {RGB (0, 150, 23), RGB (25, 200, 65), RGB (155, 35, 200)};
     static HWND   hwnd_Scroll_color, hwndLabel[3], hwndValue[3], hwnd_Scroll, hwnd_Scroll3, hwnd_text;
-    static int color[3];
+    static int id_red = 245, id_green = 230, id_blue = 28;
     static RECT rect;
     static TCHAR * szColorLabel[] = { TEXT("Color"), TEXT("Width"), TEXT("Height") };
-    int    i, cxChar, cyChar, cxClient, cyClient, Scroll_ID, iWidth, iHeight, iHscrollMax, iHscrollPos;
+    int    i, index, cxChar, cyChar, cxClient, cyClient, Scroll_ID, iWidth, iHeight, iHscrollMax, iHscrollPos;
     int    color_id = 0, posY=350, posX=340;
 
 
@@ -107,8 +122,13 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                30, 30,
                                150, 200,
                                hwnd,
-                               (HMENU) BUTTON_LISTBOX,
+                               (HMENU) IDC_LISTBOX,
                                NULL, NULL);
+
+        for (i = 0; i < 6; i++)
+        {
+            SendMessage(hwnd_listbox,LB_ADDSTRING,0,(LPARAM)tasks[i].task);    // apend string to listbox
+        }
 
         hwnd_Scroll = CreateWindow(TEXT("Scrollbar"), NULL,
                                WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_HORZ, // styles of scrollbar
@@ -138,6 +158,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_SETCURSOR:
+
         if (LOWORD(lParam) == HTCLIENT)
         {
             SetCursor(LoadCursor(hInstance, MAKEINTRESOURCE(IDI_CURSOR)));
@@ -149,10 +170,10 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                cxChar = LOWORD (lParam) ;
                cyChar = HIWORD (lParam) ;
 
-               MoveWindow(hwnd_listbox, 30, 30, cxChar/2-10, cyChar/2+60, TRUE);
+               MoveWindow(hwnd_listbox, 30, 30, cxChar/2+30, cyChar/2+60, TRUE);
                MoveWindow(hwnd_Scroll, 30, cyChar/2+100, cxChar/2+70, 20, TRUE);
-               MoveWindow(hwnd_Scroll3, cxChar/2+80, 30, 20, cyChar/2+55, TRUE);
-               MoveWindow(hwnd_Scroll_color, cxChar/2+40, 30, 20, cyChar/2+55, TRUE);
+               MoveWindow(hwnd_Scroll3, cxChar/2+120, 30, 20, cyChar/2+55, TRUE);
+               MoveWindow(hwnd_Scroll_color, cxChar/2+80, 30, 20, cyChar/2+55, TRUE);
 
                SCROLLINFO si;
                si.cbSize = sizeof(si);
@@ -172,99 +193,103 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                return 0 ;
 
     case WM_COMMAND:
+
+       /* if (LOWORD(wParam) == BUTTON_LISTBOX && (HIWORD(wParam)==LBN_DBLCLK))
+            {
+                index = SendMessage(hwnd_listbox,LB_GETCURSEL,0,0);
+                sprintf(buffer,"Do you finish it?\n %s",tasks[index].DL);
+                MessageBox(hwnd, TEXT("Hello"), TEXT("Information"), MB_YESNO);
+                SendMessage(hwnd_listbox, LB_DELETESTRING, index, 0);
+
+            }*/
+
         switch(LOWORD(wParam))
         {
+        case IDC_LISTBOX:
+
+            switch(HIWORD(wParam))
+            {
+                case LBN_DBLCLK:
+
+                    index = SendMessage(hwnd_listbox,LB_GETCURSEL,0,0);
+                    SendMessage(hwnd_listbox, LB_DELETESTRING, index, 0);
+                break;
+            }
+            break;
+        break;
+
         case IDI_ABOUT:
+
             DialogBox(hInstance, MAKEINTRESOURCE(IDI_DIALOG), hwnd, AboutDlgProc);
             break;
 
         case IDI_EXIT:
+
             DestroyWindow(hwnd);
+            break;
+
+        case IDI_GREEN:
+
+            break;
+
+            default: return DefWindowProc (hwnd, message, wParam, lParam);
         }
-        break;
-        break;
 
-        case WM_VSCROLL:
-            if ((HWND)lParam == hwnd_Scroll_color)
+    break;
+
+
+        case WM_KEYDOWN:
+
+            switch(wParam)
             {
-                switch(LOWORD(wParam))
+            case KEY_E:
                 {
-                case SB_PAGEDOWN:
-
-                    color_id = color_id + 15;
-                    break;
-
-                case SB_LINEDOWN:
-
-                    color_id = min (255, color_id + 1);
-                    break;
-
-                case SB_PAGEUP:
-
-                    color_id = color_id - 15;
-                    break;
-
-                case SB_LINEUP:
-
-                    color_id = max (0, color_id - 1);
-                    break;
-
-                case SB_TOP:
-
-                    color_id = 0;
-                    break;
-
-                case SB_BOTTOM:
-
-                    color_id = 255;
-                    break;
-
-                case SB_THUMBPOSITION:
-                case SB_THUMBTRACK:
-
-                    color_id = HIWORD(wParam);
-                    break;
-
-                default: break;
+                    if (GetAsyncKeyState(VK_LSHIFT))
+                    {
+                        DestroyWindow(hwnd);
+                    }
+                 break;
                 }
-                SetScrollPos(hwnd_Scroll_color, SB_CTL, color_id ,TRUE);
-                InvalidateRect(hwnd, )
+
+            case F1:
+                {
+                    if (GetAsyncKeyState(VK_F1))
+                    {
+                        DialogBox(hInstance, MAKEINTRESOURCE(IDI_DIALOG), hwnd, AboutDlgProc);
+                    }
+                    break;
+                }
+
+            case KEY_C:
+                {
+                    if (GetAsyncKeyState(VK_SPACE))
+                    {
+                        id_red = id_red + 25;
+                        id_green = id_green - 25;
+                        id_blue = id_blue + 25;
+                        InvalidateRect(hwnd_listbox, NULL, TRUE);
+                    }
+                 break;
+                }
+
+            case DELETE:
+                {
+                    if (GetAsyncKeyState(VK_DELETE))
+                    {
+                        SetFocus(hwnd_listbox);
+                    }
+                 break;
+                }
+
+                default:
+                    return DefWindowProc (hwnd, message, wParam, lParam);
             }
-/*            if((HWND)lParam==hwndScrollVPOS)
-            {
-                switch(LOWORD(wParam))
-                {
-                case SB_PAGEDOWN:
-                    posY-=Y_PAGE_MOVE;
-                case SB_LINEDOWN:
-                    posY=max(0,posY-Y_LINE_MOVE);
-                    break;
-                case SB_PAGEUP:
-                    posY+=Y_PAGE_MOVE;
-                case SB_LINEUP:
-                    posY=min(200,posY+Y_LINE_MOVE);
-                    break;
-                case SB_TOP:
-                    posY=200;
-                    break;
-                case SB_BOTTOM:
-                    posY=0;
-                    break;
-                case SB_THUMBPOSITION:
-                    posY=HIWORD(wParam);
-                    break;
-                default: break;
-                }
-
-                SetScrollPos(hwnd_Scroll,SB_CTL,200-posY,TRUE);
-                SetWindowPos(hwnd,HWND_TOP,posX,posY,0,0,SWP_SHOWWINDOW|SWP_NOSIZE);
-            }*/
-            return 0;
+        break;
 
         case WM_CTLCOLORLISTBOX:
 
             SetBkMode((HDC)wParam,TRANSPARENT);
-            hbrush=(HBRUSH) CreateSolidBrush(Color);
+            hbrush=(HBRUSH) CreateSolidBrush RGB(id_red, id_green, id_blue);
             return(LRESULT) hbrush;
 
         case WM_DESTROY:
