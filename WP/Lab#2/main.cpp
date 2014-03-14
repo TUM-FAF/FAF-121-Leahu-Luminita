@@ -1,30 +1,32 @@
 #include <windows.h>
 #include <stdio.h>
-#include <commdlg.h>
 #include <iostream>
+#include <commdlg.h>
 #include "resource.h"
 
 using namespace std;
 
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
-//ScrollProcedure(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK ListProc(HWND hwnd, UINT message, WPARAM, LPARAM);
 BOOL    CALLBACK   AboutDlgProc  (HWND, UINT, WPARAM, LPARAM);
 
 int idFocus;
-WNDPROC OldScroll[3];
+WNDPROC OldScroll[3], oldlist;
 
 /*  Make the class name into a global variable  */
 char szClassName[ ] = "CodeBlocksWindowsApp";
 
 static char buffer[100];
+static int index;
+static HWND hwnd_listbox;
 
 Labs tasks [6] = {
-    "1.Laboratory work #1 CO", "DL: 16 March",
-    "2.Laboratory work #1 WP", "DL: 25 February",
-    "3.Laboratory work #1 CA", "DL: 19 March",
-    "4.Laboratory work #1 CG", "DL: 21 March",
-    "5.Laboratory work #1 IDE","DL: 29 March",
-    "6.Laboratory work #2 WP" ,"DL: 11 March"};
+    "- Laboratory work #1 CO", "DL: 16 March",
+    "- Laboratory work #1 WP", "DL: 25 February",
+    "- Laboratory work #1 CA", "DL: 19 March",
+    "- Laboratory work #1 CG", "DL: 21 March",
+    "- Laboratory work #1 IDE","DL: 29 March",
+    "- Laboratory work #2 WP" ,"DL: 11 March"};
 
 
 int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszArgument, int nCmdShow)
@@ -91,13 +93,12 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HINSTANCE hInstance;
-    static HWND hwnd_listbox;
     static COLORREF crPrim[3] = {RGB (0, 150, 23), RGB (25, 200, 65), RGB (155, 35, 200)};
     static HWND   hwnd_Scroll_color, hwndLabel[3], hwndValue[3], hwnd_Scroll, hwnd_Scroll3, hwnd_text;
     static int id_red = 245, id_green = 230, id_blue = 28;
     static RECT rect;
     static TCHAR * szColorLabel[] = { TEXT("Color"), TEXT("Width"), TEXT("Height") };
-    int    i, index, cxChar, cyChar, cxClient, cyClient, Scroll_ID, iWidth, iHeight, iHscrollMax, iHscrollPos;
+    int    i, cxChar, cyChar, cxClient, cyClient, Scroll_ID, iWidth, iHeight, iHscrollMax, iHscrollPos;
     int    color_id = 0, posY=350, posX=340;
 
 
@@ -118,7 +119,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     case WM_CREATE:
 
         hwnd_listbox = CreateWindow(TEXT("LISTBOX"), TEXT(" "),
-                               WS_VISIBLE | WS_CHILD,
+                               WS_VISIBLE | WS_CHILD | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
                                30, 30,
                                150, 200,
                                hwnd,
@@ -155,6 +156,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                NULL, NULL);
 
         hInstance = ((LPCREATESTRUCT) lParam) -> hInstance;
+        oldlist=(WNDPROC) SetWindowLong (hwnd_listbox,GWL_WNDPROC,(LPARAM)ListProc);
         break;
 
     case WM_SETCURSOR:
@@ -194,30 +196,16 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
     case WM_COMMAND:
 
-       /* if (LOWORD(wParam) == BUTTON_LISTBOX && (HIWORD(wParam)==LBN_DBLCLK))
+        if (LOWORD(wParam) == IDC_LISTBOX && (HIWORD(wParam)==LBN_DBLCLK))
             {
                 index = SendMessage(hwnd_listbox,LB_GETCURSEL,0,0);
-                sprintf(buffer,"Do you finish it?\n %s",tasks[index].DL);
-                MessageBox(hwnd, TEXT("Hello"), TEXT("Information"), MB_YESNO);
-                SendMessage(hwnd_listbox, LB_DELETESTRING, index, 0);
-
-            }*/
+                sprintf(buffer,"%s",tasks[index].DL);
+                MessageBox(hwnd, buffer, TEXT("Information"), MB_OK);
+                SetFocus(hwnd_listbox);
+            }
 
         switch(LOWORD(wParam))
         {
-        case IDC_LISTBOX:
-
-            switch(HIWORD(wParam))
-            {
-                case LBN_DBLCLK:
-
-                    index = SendMessage(hwnd_listbox,LB_GETCURSEL,0,0);
-                    SendMessage(hwnd_listbox, LB_DELETESTRING, index, 0);
-                break;
-            }
-            break;
-        break;
-
         case IDI_ABOUT:
 
             DialogBox(hInstance, MAKEINTRESOURCE(IDI_DIALOG), hwnd, AboutDlgProc);
@@ -236,7 +224,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         }
 
     break;
-
 
         case WM_KEYDOWN:
 
@@ -257,7 +244,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                     {
                         DialogBox(hInstance, MAKEINTRESOURCE(IDI_DIALOG), hwnd, AboutDlgProc);
                     }
-                    break;
+                 break;
                 }
 
             case KEY_C:
@@ -268,15 +255,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                         id_green = id_green - 25;
                         id_blue = id_blue + 25;
                         InvalidateRect(hwnd_listbox, NULL, TRUE);
-                    }
-                 break;
-                }
-
-            case DELETE:
-                {
-                    if (GetAsyncKeyState(VK_DELETE))
-                    {
-                        SetFocus(hwnd_listbox);
                     }
                  break;
                 }
@@ -319,5 +297,29 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         break;
     }
     return FALSE;
+}
+
+LRESULT CALLBACK ListProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    if(message == WM_KEYDOWN && wParam == VK_DELETE)
+    {
+        index = SendMessage(hwnd_listbox,LB_GETCURSEL,0,0);
+        sprintf(buffer,"Did you finish this laboratory work? \n%s",tasks[index].DL);
+            if (MessageBox(hwnd, buffer, TEXT("Information"), MB_YESNO) == IDYES)
+            {
+                SendMessage(hwnd_listbox, LB_DELETESTRING, index, 0);
+            }
+        SetFocus(hwnd_listbox);
+    }
+
+    if (message == WM_KEYDOWN && wParam == VK_RETURN)
+    {
+        index = SendMessage(hwnd_listbox,LB_GETCURSEL,0,0);
+        sprintf(buffer,"%s",tasks[index].DL);
+        MessageBox(hwnd, buffer, TEXT("Information"), MB_OK);
+        SetFocus(hwnd_listbox);
+    }
+
+    return CallWindowProc(oldlist,hwnd,message,wParam,lParam);
 }
 

@@ -19,6 +19,7 @@
 #define F1	    0x70     //  help
 #define KEY_C   0x43
 #define DELETE	0x2E
+#define RETURN	0x0D
  typedef struct Labs
 {
     char* task;
