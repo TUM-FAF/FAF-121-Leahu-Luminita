@@ -13,8 +13,7 @@ BEGIN
     END
     POPUP "&Edit"
     BEGIN
-        MENUITEM "&RED",            IDI_RED
-        MENUITEM "&WHITE",          IDI_WHITE
+        MENUITEM "&DEFAULT COLOR",            IDI_DEFAULT
     END
     POPUP "&Help"
     BEGIN

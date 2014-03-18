@@ -8,10 +8,11 @@ using namespace std;
 
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK ListProc(HWND hwnd, UINT message, WPARAM, LPARAM);
+LRESULT CALLBACK ScrollProc(HWND hwnd, UINT message, WPARAM, LPARAM);
 BOOL    CALLBACK   AboutDlgProc  (HWND, UINT, WPARAM, LPARAM);
 
 int idFocus;
-WNDPROC OldScroll[3], oldlist;
+WNDPROC old_scroll, oldlist;
 
 /*  Make the class name into a global variable  */
 char szClassName[ ] = "CodeBlocksWindowsApp";
@@ -94,24 +95,24 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 {
     static HINSTANCE hInstance;
     static COLORREF crPrim[3] = {RGB (0, 150, 23), RGB (25, 200, 65), RGB (155, 35, 200)};
-    static HWND   hwnd_Scroll_color, hwndLabel[3], hwndValue[3], hwnd_Scroll, hwnd_Scroll3, hwnd_text;
+    static HWND   hwnd_Scroll, hwnd_Scroll3, hwnd_Scroll_color, hwnd_text;
     static int id_red = 245, id_green = 230, id_blue = 28;
     static RECT rect;
     static TCHAR * szColorLabel[] = { TEXT("Color"), TEXT("Width"), TEXT("Height") };
-    int    i, cxChar, cyChar, cxClient, cyClient, Scroll_ID, iWidth, iHeight, iHscrollMax, iHscrollPos;
-    int    color_id = 0, posY=350, posX=340;
+    int    i, cxChar, cyChar, cxClient, cyClient, Scroll_ID, iscroll, iscrollh, iWidth, iHeight, iSysWidth, iSysHeight;
+    static int  color_id = 0, posY = 200, posX = 400;
 
 
     TCHAR  szBuffer[10];
     HBRUSH hbrush;
-    SCROLLINFO scr;
+    SCROLLINFO si;
     HDC        hdc;
     TEXTMETRIC tm;
 
     hdc = GetDC(hwnd);
     GetTextMetrics(hdc, &tm);
-    cxClient = tm.tmAveCharWidth;
-    cyClient = tm.tmHeight;
+    cxChar = tm.tmAveCharWidth;
+    cyChar = tm.tmHeight;
     ReleaseDC(hwnd, hdc);
 
     switch (message)                  /* handle the messages */
@@ -132,30 +133,48 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         }
 
         hwnd_Scroll = CreateWindow(TEXT("Scrollbar"), NULL,
-                               WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_HORZ, // styles of scrollbar
+                               WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_HORZ |SBS_BOTTOMALIGN, // styles of scrollbar
                                30, 240,
                                240, 20,
                                hwnd,
                                (HMENU) SCROLLBAR_1,
                                NULL, NULL);
 
+        SetScrollRange(hwnd_Scroll, SB_CTL, 0, 400, FALSE);
+        SetScrollPos(hwnd_Scroll, SB_CTL, 0, FALSE);
+
         hwnd_Scroll_color = CreateWindow(TEXT("Scrollbar"), NULL,
-                               WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_VERT, // styles of scrollbar
+                               WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_VERT | SBS_BOTTOMALIGN, // styles of scrollbar
                                200, 30,
                                20, 192,
                                hwnd,
                                (HMENU) SCROLLBAR_2,
                                NULL, NULL);
 
+        SetScrollRange(hwnd_Scroll_color, SB_CTL, 0, 255, FALSE);
+        SetScrollPos(hwnd_Scroll_color, SB_CTL, 0, FALSE);
+
         hwnd_Scroll3 = CreateWindow(TEXT("Scrollbar"), NULL,
-                               WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_VERT, // styles of scrollbar
+                               WS_VISIBLE | WS_CHILD | WS_TABSTOP | SBS_VERT | SBS_BOTTOMALIGN, // styles of scrollbar
                                250, 30,
                                20, 192,
                                hwnd,
                                (HMENU) SCROLLBAR_3,
                                NULL, NULL);
 
+        SetScrollRange(hwnd_Scroll3, SB_CTL, 0, 200, FALSE);
+        SetScrollPos(hwnd_Scroll3, SB_CTL, 0, FALSE);
+
+        hwnd_text   = CreateWindow(TEXT("static"), TEXT("Laboratory Work"),
+                               WS_VISIBLE | WS_CHILD , // styles of button
+                               30, 5,
+                               192, 20,
+                               hwnd,
+                               (HMENU) BUTTON_STATIC,
+                               NULL, NULL);
+
         hInstance = ((LPCREATESTRUCT) lParam) -> hInstance;
+
         oldlist=(WNDPROC) SetWindowLong (hwnd_listbox,GWL_WNDPROC,(LPARAM)ListProc);
         break;
 
@@ -169,30 +188,289 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_SIZE :
-               cxChar = LOWORD (lParam) ;
-               cyChar = HIWORD (lParam) ;
+        {
+               cxClient= LOWORD (lParam) ;
+               cyClient = HIWORD (lParam) ;
 
-               MoveWindow(hwnd_listbox, 30, 30, cxChar/2+30, cyChar/2+60, TRUE);
-               MoveWindow(hwnd_Scroll, 30, cyChar/2+100, cxChar/2+70, 20, TRUE);
-               MoveWindow(hwnd_Scroll3, cxChar/2+120, 30, 20, cyChar/2+55, TRUE);
-               MoveWindow(hwnd_Scroll_color, cxChar/2+80, 30, 20, cyChar/2+55, TRUE);
+               MoveWindow(hwnd_listbox, 30, 30, cxClient/2+30, cyClient/2+60, TRUE);
+               MoveWindow(hwnd_Scroll, 30, cyClient/2+100, cxClient/2+70, 20, TRUE);
+               MoveWindow(hwnd_Scroll3, cxClient/2+120, 30, 20, cyClient/2+55, TRUE);
+               MoveWindow(hwnd_Scroll_color, cxClient/2+80, 30, 20, cyClient/2+55, TRUE);
 
-               SCROLLINFO si;
-               si.cbSize = sizeof(si);
-               si.fMask  = SIF_RANGE | SIF_PAGE;
-               si.nMin   = 0;
-               si.nMax  = ((350 - 70) / cyClient);
-               si.nPage = iHeight / cyChar;
-               SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+            si.cbSize = sizeof(si);
+            si.fMask = SIF_RANGE | SIF_PAGE;
+            si.nMin = 0;
+            si.nMax = ((340 - 100) / cyChar);
+            si.nPage = cyClient / cyChar;
+            SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
 
-               si.cbSize = sizeof(si);
-               si.fMask  = SIF_RANGE | SIF_PAGE;
-               si.nMin   = 0;
-               si.nMax  = ((340 - 20) / cxClient);
-               si.nPage = iWidth / cxChar;
-               SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+            si.cbSize = sizeof(si);
+            si.fMask = SIF_RANGE | SIF_PAGE;
+            si.nMin = 0;
+            si.nMax = ((350 - 40) / cxChar);
+            si.nPage = cxClient / cxChar;
+            SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
 
-               return 0 ;
+               break;
+        }
+
+ case WM_VSCROLL :
+
+if((HWND)lParam == hwnd_Scroll_color)
+{
+    switch(LOWORD(wParam))
+    {
+        case SB_PAGEDOWN:
+
+            color_id = color_id + Color;
+            break;
+
+        case SB_LINEDOWN:
+
+            color_id=min(255,color_id + 10);
+            break;
+
+        case SB_PAGEUP:
+
+            color_id = color_id - Color;
+            break;
+
+        case SB_LINEUP:
+
+            color_id = max(0, color_id - 10);
+            break;
+
+        case SB_TOP:
+
+            color_id = 0;
+            break;
+
+        case SB_BOTTOM:
+
+            color_id = 255;
+            break;
+
+        case SB_THUMBPOSITION:
+            break;
+
+        case SB_THUMBTRACK:
+
+            color_id = HIWORD(wParam);
+            break;
+
+            default: break;
+
+            break;
+            }
+
+    SetScrollPos(hwnd_Scroll_color, SB_CTL, color_id, TRUE);
+    InvalidateRect(hwnd_text,NULL,TRUE);
+}
+    if((HWND)lParam == hwnd_Scroll3)
+{
+    switch(LOWORD(wParam))
+    {
+        case SB_PAGEDOWN:
+
+            posY = posY + 20;
+            break;
+
+        case SB_LINEDOWN:
+
+            posY = min(200, posY - 10);
+            break;
+
+        case SB_PAGEUP:
+
+            posY = posY - 20;
+            break;
+
+        case SB_LINEUP:
+
+            posY = max(0, posY + 10);
+            break;
+
+        case SB_TOP:
+
+            posY = 0;
+            break;
+
+        case SB_BOTTOM:
+
+            posY = 200;
+            break;
+
+        case SB_THUMBPOSITION:
+            break;
+
+        case SB_THUMBTRACK:
+
+            posY = HIWORD(wParam);
+            break;
+
+            default: break;
+
+            break;
+            }
+
+    SetScrollPos(hwnd_Scroll3, SB_CTL , 200 - posY, TRUE);
+    SetWindowPos(hwnd, HWND_TOP, posX, posY, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE);
+}
+
+else
+{
+    si.cbSize = sizeof(si);
+        si.fMask = SIF_ALL;
+		GetScrollInfo(hwnd, SB_HORZ, &si);
+        int    y = si.nPos;
+
+        switch(LOWORD(wParam))
+				{
+					case SB_TOP:
+
+						si.nPos = si.nMin;
+					break;
+
+					case SB_BOTTOM:
+
+						si.nPos = si.nMax;
+					break;
+
+					case SB_LINEUP:
+
+						si.nPos -= 1;
+					break;
+
+					case SB_LINEDOWN:
+						si.nPos += 1;
+					break;
+
+					case SB_PAGEUP:
+						si.nPos -= si.nPage;
+					break;
+
+					case SB_PAGEDOWN:
+						si.nPos += si.nPage;
+					break;
+
+					case SB_THUMBTRACK:
+						si.nPos = si.nTrackPos;
+					break;
+
+					default:
+						break;
+				}
+
+				si.fMask = SIF_POS;
+				SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+				GetScrollInfo(hwnd, SB_HORZ, &si);
+
+				if(si.nPos != y)
+                {
+					ScrollWindow(hwnd, 0, cyChar * (y - si.nPos), NULL, NULL);
+					UpdateWindow(hwnd);
+				}
+
+    }
+break;
+
+
+ case WM_HSCROLL :
+
+if((HWND)lParam == hwnd_Scroll)
+{
+    switch(LOWORD(wParam))
+    {
+        case SB_PAGEDOWN:
+
+            posX = posX + 20;
+            break;
+
+        case SB_LINEDOWN:
+
+            posX = min(200, posX - 10);
+            break;
+
+        case SB_PAGEUP:
+
+            posX= posX - 20;
+            break;
+
+        case SB_LINEUP:
+
+            posX = max(0, posX + 10);
+            break;
+
+        case SB_TOP:
+
+            posX = 0;
+            break;
+
+        case SB_BOTTOM:
+
+            posX = 200;
+            break;
+
+        case SB_THUMBPOSITION:
+            break;
+
+        case SB_THUMBTRACK:
+
+            posX = HIWORD(wParam);
+            break;
+
+            default: break;
+
+            break;
+            }
+
+    SetScrollPos(hwnd_Scroll, SB_CTL , 200 - posX, TRUE);
+    SetWindowPos(hwnd, HWND_TOP, posX, posY, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE);
+}
+
+    else
+    {
+        si.cbSize = sizeof(si);
+					si.fMask = SIF_ALL;
+					GetScrollInfo(hwnd, SB_HORZ, &si);
+
+					int x = si.nPos;
+					switch(LOWORD(wParam))
+					{
+						case SB_LINELEFT:
+							si.nPos -= 1;
+						break;
+
+						case SB_LINERIGHT:
+							si.nPos += 1;
+						break;
+
+						case SB_PAGELEFT:
+							si.nPos -= si.nPage;
+						break;
+
+						case SB_PAGERIGHT:
+							si.nPos += si.nPage;
+						break;
+
+						case SB_THUMBPOSITION:
+							si.nPos = si.nTrackPos;
+						break;
+
+						default:break;
+					}
+
+					si.fMask = SIF_POS;
+					SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+					GetScrollInfo(hwnd, SB_HORZ, &si);
+
+					if(si.nPos != x)
+					{
+						ScrollWindow(hwnd, cxChar * (x - si.nPos), 0, NULL, 0);
+						UpdateWindow(hwnd);
+					}
+    }
+			break;
 
     case WM_COMMAND:
 
@@ -216,7 +494,12 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
             DestroyWindow(hwnd);
             break;
 
-        case IDI_GREEN:
+        case IDI_DEFAULT:
+
+            id_red = 245;
+            id_green = 230;
+            id_blue = 28;
+            InvalidateRect(hwnd_listbox, NULL, TRUE);
 
             break;
 
@@ -263,6 +546,14 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                     return DefWindowProc (hwnd, message, wParam, lParam);
             }
         break;
+
+        case WM_CTLCOLORSTATIC:
+
+            SetTextColor((HDC)wParam,RGB(color_id + 20, 100, 255 - color_id));
+            SetBkMode((HDC)wParam,TRANSPARENT);
+            hbrush=(HBRUSH)GetStockObject(NULL_BRUSH);
+            return(LRESULT) hbrush;
+
 
         case WM_CTLCOLORLISTBOX:
 
