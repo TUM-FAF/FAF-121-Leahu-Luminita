@@ -16,9 +16,9 @@
 
 ### During this laboratory work I executed the following Mandatory Tasks:
 
-   - ** Display a dialog box on some event (ex. on clicking some button)**
+   - **Display a dialog box on some event (ex. on clicking some button)**
     
-      In order to display a dialog box I have declared a specific declaration in ```resource.rc`` file :
+      In order to display a dialog box I have declared a specific declaration in ``resource.rc`` file :
       ```
       BEGIN
         DEFPUSHBUTTON   "OK",IDOK,60,80,50,14
