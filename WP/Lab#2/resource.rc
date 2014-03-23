@@ -13,7 +13,7 @@ BEGIN
     END
     POPUP "&Edit"
     BEGIN
-        MENUITEM "&DEFAULT COLOR",            IDI_DEFAULT
+        MENUITEM "&DEFAULT COLOR",  IDI_DEFAULT
     END
     POPUP "&Help"
     BEGIN
@@ -23,10 +23,14 @@ END
 //Dialog box
 IDI_DIALOG DIALOG DISCARDABLE 32,32,180,100
 STYLE DS_MODALFRAME | WS_POPUP
-FONT 10 , "Forte"
+FONT 8 , "Courier"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,60,80,50,14
-    ICON            IDI_ICON,IDC_STATIC,60,20,30,50
+    ICON            IDI_ICON,IDC_STATIC,20,20,30,50
     CTEXT           "About",IDC_STATIC,40,10,100,8
+    CTEXT           "Laboratory work #2",IDC_STATIC,40,20,100,8
+    CTEXT           "If you want to see",IDC_STATIC,40,40,100,8
+    CTEXT           "DLs press ENTER or ", IDC_STATIC, 40, 50, 100,8
+    CTEXT           "DOUBLE CLICK to chosen one",IDC_STATIC,40,60,100,8
 END
 
