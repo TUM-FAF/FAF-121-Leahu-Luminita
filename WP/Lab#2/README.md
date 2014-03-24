@@ -44,7 +44,10 @@
        - `POPUP`    - top element of the menu
        - `MENUITEM` - menu item
       
-     Actions to the items are added in `WM_COMMAND`, where I have attached to Menu `ID`s specific actions. 
+     Actions to the items are added in `WM_COMMAND`, where I have attached to Menu `ID`s specific actions.
+     - `EXIT`          - exit from the application
+     - `DEFAULT COLOR` - change the listox color to initial one ( if is changed by pressing SPACE+C)
+     - `ABOUT`         - display a DialogBox
       
    - **Add a scroll bar that will change any visible parameter of any other element (color of a text)**
     
@@ -93,11 +96,19 @@
      si.nPage = cyClient / cyChar;               // the page size, in device units
      SetScrollInfo(hwnd, SB_VERT, &si, TRUE);    // sets the parameters of a scroll bar
      ```
+     
+     The result of my application:
+     
+     ![screen1] (https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%232/screens/screen1.png)
+     ![screen3] (https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%232/screens/screen3.png)
 ## Conclusion
 
    This laboratory work was harder and more complex than first one. I developed skills in working not only with child windows, but also with scrollbars. It was shown that scrollbars can execute custom actions ( change text color, change window's position or size). Also I noticed that default scrollbars can appears only if necessry, at specific window size.
    ### Issues
    - Working with custom scrollbars:
 
-     This task was quite difficult for me, because it took me some time to understand all scroll cases, like `SB_LINEDOWN`, `SB_PAGEUP` and others. In order to get this part done, I studied the image [Figure 1] (https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%232/screens/scrollinfo.png)
+     This task was quite difficult for me, because it took me some time to understand all scroll cases, like `SB_LINEDOWN`, `SB_PAGEUP` and others. In order to get this part done, I studied the image [Figure 1] (https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%232/screens/scrollinfo.png). Another problems was with variables, which manage the scrolls work, like `color_id` or `posX`. My mistake was to declare them `local int` instead of `global` or `local static int`.
+    - Hook keyboard input, add 2 custom events for 2 different keyboard combinations:
+    
+     Here I did not find a solution, but I think that I have to work with `SetFocus()` function. When the focus is set to the listbox or to the scrollbar, keyboard combinations `LSHIFT+E`, `SPACE+C` and `F1` do not work.
      
