@@ -13,5 +13,5 @@
 _Red Pill_
 
 1. [Lab#1](https://github.com/TUM-FAF/FAF-121-Leahu-Luminita/tree/master/WP/Lab%231)
-*  Lab#2
+*  [Lab#2](https://github.com/TUM-FAF/FAF-121-Leahu-Luminita/tree/master/WP/Lab%232)
 *  Lab#3
