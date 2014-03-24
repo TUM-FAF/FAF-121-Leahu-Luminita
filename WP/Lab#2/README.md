@@ -79,10 +79,23 @@
      ``LoadIcon (GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON));``     - custom icon
      ``LoadCursor (GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_CURSOR));`` - custom cursor
       
-     In the project I added files with extension 
+     In the project I added files with extensions:
       - `.ico` -  for custom icon  
       - `.cur` -  for custom cursor
   - **Use a scroll bar to scroll through application working space. Scroll should appear only when necessary**
      
+     For this task I got all information about vertical and horizontal scroll in `WM_SIZE` :
+     ```
+     si.cbSize = sizeof(si);                     // specifies the size, in bytes
+     si.fMask = SIF_RANGE | SIF_PAGE;            // specifies the scroll bar parameters to set or retrieve
+     si.nMin = 0;                                // the minimum scrolling position
+     si.nMax = ((340 - 100) / cyChar);           // the maximum scrolling position
+     si.nPage = cyClient / cyChar;               // the page size, in device units
+     SetScrollInfo(hwnd, SB_VERT, &si, TRUE);    // sets the parameters of a scroll bar
+     ```
 ## Conclusion
-   
+
+   This laboratory work was harder and more complex than first one. I developed skills in working not only with child windows, but also with scrollbars. It was shown that scrollbars can execute custom actions ( change text color, change window's position or size). Also I noticed that default scrollbars can appears only if necessry, at specific window's size.
+   ### Issues
+   - Working with custom scrollbars:
+     This task was quite difficult for me, because it took me some time to understand all scroll cases, like `SB_LINEDOWN`, `SB_PAGEUP` and others. In order to get this part done, I studied the image 'figure1'
