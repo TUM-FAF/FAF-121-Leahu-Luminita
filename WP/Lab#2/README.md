@@ -1,6 +1,6 @@
 # Windows Programming Laboratory Work #2
 
-### Title: Advanced Form Elements. Child Windows. Basics of Working With Keyboard.
+### Title: Advanced Form Elements. Child Windows. Basics of Working with Keyboard.
 
 
    - **Contents:**
@@ -12,7 +12,6 @@
     - Dialog Boxes
 
 ## The Application Creation Steps
-
 
 ### In this laboratory work I executed the following mandatory tasks:
 
