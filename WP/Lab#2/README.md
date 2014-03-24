@@ -99,5 +99,5 @@
    ### Issues
    - Working with custom scrollbars:
 
-     This task was quite difficult for me, because it took me some time to understand all scroll cases, like `SB_LINEDOWN`, `SB_PAGEUP` and others. In order to get this part done, I studied the image 'figure1'
+     This task was quite difficult for me, because it took me some time to understand all scroll cases, like `SB_LINEDOWN`, `SB_PAGEUP` and others. In order to get this part done, I studied the image [Figure 1] (https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%232/screens/scrollinfo.png)
      
