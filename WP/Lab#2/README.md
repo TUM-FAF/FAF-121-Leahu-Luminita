@@ -95,7 +95,9 @@
      ```
 ## Conclusion
 
-   This laboratory work was harder and more complex than first one. I developed skills in working not only with child windows, but also with scrollbars. It was shown that scrollbars can execute custom actions ( change text color, change window's position or size). Also I noticed that default scrollbars can appears only if necessry, at specific window's size.
+   This laboratory work was harder and more complex than first one. I developed skills in working not only with child windows, but also with scrollbars. It was shown that scrollbars can execute custom actions ( change text color, change window's position or size). Also I noticed that default scrollbars can appears only if necessry, at specific window size.
    ### Issues
    - Working with custom scrollbars:
+
      This task was quite difficult for me, because it took me some time to understand all scroll cases, like `SB_LINEDOWN`, `SB_PAGEUP` and others. In order to get this part done, I studied the image 'figure1'
+     
