@@ -26,7 +26,7 @@
 
    - **Create 2 more branches with at least one unique committed file per branch**
    In order to do this I executed following commands:
-	``
+	```
 	git init
 	touch file.txt	             // creates a file		
 	git add file.txt             // adds file to branch _master_
@@ -37,5 +37,5 @@
 	touch file1.txt		     // creats a txt file
 	git add file1.txt            // adds this file on _testbranch_
 	git commit -m 'commit on testbranch'
-	``
+	```
 	Now when I'm use `git checkout master` there will be _file.txt_ in my folder, if I write `git checkout testbranch` will be both files.
