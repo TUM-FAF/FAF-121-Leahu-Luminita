@@ -1,11 +1,12 @@
 #include "resource.h"
 #include "afxres.h"
 //Icon location
-IDI_ICON  ICON DISCARDABLE "icon.ico"
+//IDI_ICON  ICON DISCARDABLE "icon.ico"
 //Cursor location
-IDI_CURSOR CURSOR DISCARDABLE "mouse.cur"
+//IDI_CURSOR CURSOR DISCARDABLE "mouse.cur"
+IDI_BITMAP BITMAP DISCARDABLE "fgures.bmp"
 //Menu
-IDI_MENU MENU DISCARDABLE
+/*IDI_MENU MENU DISCARDABLE
 BEGIN
     POPUP "&File"
     BEGIN
@@ -32,3 +33,4 @@ BEGIN
 
 END
 
+*/

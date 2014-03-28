@@ -176,7 +176,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
         case WM_SIZE :
         {
-            cxClient= LOWORD (lParam) ;
+            cxClient = LOWORD (lParam) ;
             cyClient = HIWORD (lParam) ;
 
             // make windows to fit on resize
@@ -367,8 +367,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
             }   // end else statement
         break;
         }       // end case statement
-
-
 
         case WM_HSCROLL :
         {
