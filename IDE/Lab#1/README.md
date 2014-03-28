@@ -20,6 +20,7 @@
 	 :wp				// write into file and exit
 	 git add text.txt   // add the file to folder
 	 git commit -m "added file with my name"
+
 	 ```
 #### Tasks with points:
 
