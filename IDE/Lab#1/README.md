@@ -17,7 +17,7 @@
 	 vim text.txt   	  #editor to create a text file
 	 i              	  #enter an insert
 	 Luminita Leahu		  #your text 
-	 :wp				        #write into file and exit
+	 :wp				       #write into file and exit
 	 git add text.txt   #add the file to folder
 	 git commit -m "added file with my name"
 	 ```
@@ -53,6 +53,7 @@
 
        `git reset --hard HEAD`   - where _HEAD_ is the last commit ID in  current branch
      - Reset a branch to some specific commit :
+
        ```sh
        git log             #displays all commits, find here the commit to reset
        git reset --hard ID #put instead of _ID_ finded commit ID
@@ -81,12 +82,12 @@
    - **Create a VCS merge conflict and solve it**
 
       Conflict appears when a specific file is edited on two different branches. 
-      ![Branches](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%231/branches.png)
 
+      ![Branches](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%231/branches.png)
       - Create a VCS merge conflict:
         ```sh
         touch file.txt
-        vim file.txt    #write some text 
+        vim file.txt    //write some text 
         git add file.txt
         git commit -m "first commit"
         git checkout -b test  #switvh to a new branch _test_
