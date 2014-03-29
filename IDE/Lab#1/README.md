@@ -5,7 +5,7 @@
 #### In this laboratory work I executed the following mandatory tasks:
 
    - **Connect to a remote server via SSH**
-   - 
+
 	In order to do this I used `putty` program. 
    - **Initialize a repository on server**
    
@@ -51,13 +51,14 @@
 
      - Reset a branch to previous commit:
        `git reset --hard HEAD`  # where _HEAD_ is the last commit ID in  current branch
-     - Reset a branch to soe specific commit :
+     - Reset a branch to some specific commit :
        ```
        git log             # displays all commits, find here the commit to reset
        git reset --hard ID # put instead of _ID_ finded commit ID
 
        ```
    - **Restore a reset branch back to its previous state**
+
       `git reset --hard ID`
 
    - **Master any CLI editor (VIM). Learn 10 commands' sets**
@@ -76,5 +77,36 @@
        12. `:w`    - save file
        13. `:args` - list files
        14. `:tabnew` - creates a new tab 
+
+   - **Create a VCS merge conflict and solve it**
+
+      Conflict appears when a specific file is edited on two different branches. 
+      [branches](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%231/branches.png)
+
+      - Create a VCS merge conflict:
+        ```
+        touch file.txt
+        vim file.txt    # write some text 
+        git add file.txt
+        git commit -m "first commit"
+        git checkout -b test  # switvh to a new branch _test_
+        vim file.txt     # make changes in file 
+        git add file.txt
+        git commit -m "added file to test branch"
+        cat file.txt # some text in conflict branch
+        git checkout master # switch to master branch
+        cat file.txt # some text in master branch
+        git checkout master 
+        vim file     # edit the file
+        git commit -a -m "divergent commit"
+
+        git merge conflict # CONFLICT <content>: Merge conflict in file.txt
+        
+      In order to solve the conflict:
+        ```
+        vim file     
+        git commit -a -m "solve merge conflict"
+        
+        ```
 
 
