@@ -87,10 +87,10 @@
       - Create a VCS merge conflict:
         ```sh
         touch file.txt
-        vim file.txt    //write some text 
+        vim file.txt    #write some text 
         git add file.txt
         git commit -m "first commit"
-        git checkout -b test  #switvh to a new branch _test_
+        git checkout -b test  #switch to a new branch test
         vim file.txt     #make changes in file 
         git add file.txt
         git commit -m "added file to test branch"
@@ -109,4 +109,6 @@
         git commit -a -m "solve merge conflict"        
         ```
 
-
+#### Conclusion:
+ 
+ This laboratory work shown me that I have to read more about Server environment. I found out many useful information and solutions for some problems that might appear during working with github. At the first look I didn't understand what does this tasks mean and how to solve them. After searching trough github documentation and other sites and asking my colleges about each one I was able to understand what is about.  
