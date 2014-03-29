@@ -12,22 +12,21 @@
 	`git init`
    - **Create a file in repository folder, write in your name, save and commit it**
   
-   	 ```
+   	```sh
 	 mkdir Luminita 	  #create a folder
 	 vim text.txt   	  #editor to create a text file
 	 i              	  #enter an insert
 	 Luminita Leahu		  #your text 
-	 :wp				# write into file and exit
+	 :wp				        #write into file and exit
 	 git add text.txt   #add the file to folder
 	 git commit -m "added file with my name"
-
 	 ```
 #### Tasks with points:
 
    - **Create 2 more branches with at least one unique committed file per branch**
-   
+
    In order to do this I executed following commands:
-	```
+	```sh
 	git init
 	touch file.txt	             #creates a file		
 	git add file.txt             #adds file to branch _master_
@@ -43,7 +42,7 @@
 
    - **Set a branch to track a remote origin on github**
 
-    ```
+    ```sh
     git remote add origin < URL address > #add a remote origin
     git push -u origin master             #push
     ```
@@ -51,12 +50,12 @@
    - **Reset a branch to previous commit, reset a branch to some specific commit**
 
      - Reset a branch to previous commit:
-       `git reset --hard HEAD`  #where _HEAD_ is the last commit ID in  current branch
+
+       `git reset --hard HEAD`   - where _HEAD_ is the last commit ID in  current branch
      - Reset a branch to some specific commit :
-       ```
+       ```sh
        git log             #displays all commits, find here the commit to reset
        git reset --hard ID #put instead of _ID_ finded commit ID
-
        ```
    - **Restore a reset branch back to its previous state**
 
@@ -82,10 +81,10 @@
    - **Create a VCS merge conflict and solve it**
 
       Conflict appears when a specific file is edited on two different branches. 
-      [Branches](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%231/branches.png)
+      ![Branches](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%231/branches.png)
 
       - Create a VCS merge conflict:
-        ```
+        ```sh
         touch file.txt
         vim file.txt    #write some text 
         git add file.txt
@@ -101,14 +100,12 @@
         vim file     #edit the file
         git commit -a -m "divergent commit"
         git merge conflict  #CONFLICT <content>: Merge conflict in file.txt
-
         ```
         
       In order to solve the conflict:
         ```
         vim file     
-        git commit -a -m "solve merge conflict"
-        
+        git commit -a -m "solve merge conflict"        
         ```
 
 
