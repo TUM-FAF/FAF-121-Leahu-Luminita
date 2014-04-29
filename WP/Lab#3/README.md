@@ -39,4 +39,8 @@
      
      ![screen1] (https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/WP/Lab%233/photo1.png)
 
+## Conclusion
+
+This laboratory work was hard but with a lot of fun. I developed skills in working with GDI primitives. It was shown that we can draw different objects like ( lines, ellipses) with different width and colors.
+
      
