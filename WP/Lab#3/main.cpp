@@ -597,7 +597,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         FillRect(hdc, &area, NewBrush1);
         DeleteObject(NewBrush1);
 
-        // Draw logo
         hdcMem = CreateCompatibleDC(hdc);
         SelectObject(hdcMem, hbmplogo);
         BitBlt(hdc, 515, 40, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
