@@ -316,8 +316,10 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 InvalidateRect(hwnd, &area, FALSE);
 				InvalidateRect(hwnd, &area, TRUE);
             break;
+            default:
+                return 0;
          }
-
+     break;
      }
 
     case WM_MOUSEMOVE:
