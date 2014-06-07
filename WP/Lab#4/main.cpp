@@ -1,10 +1,14 @@
 #include <windows.h>
+#include "resource.h"
 
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 
 /*  Make the class name into a global variable  */
 char szClassName[ ] = "CodeBlocksWindowsApp";
+void UpdateBall(RECT* prc);
+void DrawBall(HDC hdc, RECT* prc);
+
 
 int WINAPI WinMain (HINSTANCE hThisInstance,
                      HINSTANCE hPrevInstance,
@@ -73,8 +77,45 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    static HINSTANCE hInstance;
+    static BITMAP bm;
+    static HBITMAP g_hbmBall = NULL;
+
+    g_hbmBall = (HBITMAP)LoadImage(hInstance, "ball.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    GetObject(g_hbmBall, sizeof(bm), &bm);
+
+    ZeroMemory(&g_ballInfo, sizeof(g_ballInfo));
+    g_ballInfo.width = bm.bmWidth;
+    g_ballInfo.height = bm.bmHeight;
+
+    g_ballInfo.dx = BALL_MOVE_DELTA;
+    g_ballInfo.dy = BALL_MOVE_DELTA;
+
+    const int ID_TIMER = 1;
+
+    int ret = SetTimer(hwnd, ID_TIMER, 50, NULL);
+
+    if(ret == 0)
+    {
+       MessageBox(hwnd, "Could not SetTimer()!", "Error", MB_OK | MB_ICONEXCLAMATION);
+    }
+
+
     switch (message)                  /* handle the messages */
     {
+        case WM_TIMER:
+        {
+            RECT rcClient;
+            HDC hdc = GetDC(hwnd);
+
+            GetClientRect(hwnd, &rcClient);
+            UpdateBall(&rcClient);
+            DrawBall(hdc, &rcClient);
+
+            ReleaseDC(hwnd, hdc);
+        }
+        break;
+
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
@@ -83,4 +124,59 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     }
 
     return 0;
+}
+
+void UpdateBall(RECT* prc)
+{
+    g_ballInfo.x += g_ballInfo.dx;
+    g_ballInfo.y += g_ballInfo.dy;
+
+    if(g_ballInfo.x < 0)
+    {
+        g_ballInfo.x = 0;
+        g_ballInfo.dx = BALL_MOVE_DELTA;
+    }
+    else if(g_ballInfo.x + g_ballInfo.width > prc->right)
+    {
+        g_ballInfo.x = prc->right - g_ballInfo.width;
+        g_ballInfo.dx = -BALL_MOVE_DELTA;
+    }
+
+    if(g_ballInfo.y < 0)
+    {
+        g_ballInfo.y = 0;
+        g_ballInfo.dy = BALL_MOVE_DELTA;
+    }
+    else if(g_ballInfo.y + g_ballInfo.height > prc->bottom)
+    {
+        g_ballInfo.y = prc->bottom - g_ballInfo.height;
+        g_ballInfo.dy = -BALL_MOVE_DELTA;
+    }
+}
+
+void DrawBall(HDC hdc, RECT* prc)
+{
+    HDC hdcBuffer = CreateCompatibleDC(hdc);
+    HBITMAP hbmBuffer = CreateCompatibleBitmap(hdc, prc->right, prc->bottom);
+    HBITMAP hbmOldBuffer ;
+    hbmOldBuffer =  SelectObject(hdcBuffer, hbmBuffer);
+
+    HDC hdcMem = CreateCompatibleDC(hdc);
+    HBITMAP hbmOld = SelectObject(hdcMem, g_hbmMask);
+
+    FillRect(hdcBuffer, prc, GetStockObject(WHITE_BRUSH));
+
+    BitBlt(hdcBuffer, g_ballInfo.x, g_ballInfo.y, g_ballInfo.width, g_ballInfo.height, hdcMem, 0, 0, SRCAND);
+
+    SelectObject(hdcMem, g_hbmBall);
+    BitBlt(hdcBuffer, g_ballInfo.x, g_ballInfo.y, g_ballInfo.width, g_ballInfo.height, hdcMem, 0, 0, SRCPAINT);
+
+    BitBlt(hdc, 0, 0, prc->right, prc->bottom, hdcBuffer, 0, 0, SRCCOPY);
+
+    SelectObject(hdcMem, hbmOld);
+    DeleteDC(hdcMem);
+
+    SelectObject(hdcBuffer, hbmOldBuffer);
+    DeleteDC(hdcBuffer);
+    DeleteObject(hbmBuffer);
 }
