@@ -60,9 +60,8 @@ namespace Simulatron_IDE
 
             string[] name = { "I r o n", "M a r b l e", "S t o n e", "U l i f o", "I z u q i" };
             string[] planets = { "V e n u s", "J u p i t e r", "M a r s", "S a t u r n", "N e p t u n e" };
-            string[] danger = { "H i g h t", "M e d i u m", "H i g h t", "M e d i u m", "L o w" };
+            string[] danger = { "H i g h", "Moderate", "H i g h", "Moderate", "L o w" };
             string[] second = { "7", "9", "5", "11", "13" };
-            char charIndex;
 
                 if ((r >= 0) & (r <= 4))
                 {
@@ -154,6 +153,8 @@ namespace Simulatron_IDE
             planet_input.Text = " ";
             danger_input.Text = " ";
             seconds.Text = " ";
+            i_captured = 0;
+            i = 0;
             timer1.Stop();
             
             color.Image = null;
@@ -184,6 +185,11 @@ namespace Simulatron_IDE
                 MessageBox.Show("The alien is captured", "Good job!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
    
+
+        }
+
+        private void detected_Click(object sender, EventArgs e)
+        {
 
         }
 

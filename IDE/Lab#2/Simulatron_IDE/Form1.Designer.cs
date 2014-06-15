@@ -80,6 +80,7 @@
             this.detected.Size = new System.Drawing.Size(257, 28);
             this.detected.TabIndex = 1;
             this.detected.Text = "No aliens detected";
+            this.detected.Click += new System.EventHandler(this.detected_Click);
             // 
             // nr
             // 
