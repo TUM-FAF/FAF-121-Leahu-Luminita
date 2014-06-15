@@ -13,14 +13,21 @@
 
 #### In this laboratory work I executed the following tasks with points:
 
-    - Add 3 non-standard controls (2pt)
-    - Make controls to interact. At least 3 interactions (1pt) 
-    - Create a custom control (not existent in IDE) (2pt)
-    - Create a _Reset_ button. On clicking this button all controls should go to their default state (1pt)
-    - Set a breakpoint in your application and check variables values at that moment of time (1pt)
-    - _Mention your own tasks that you did and claim points for them_
-      - Sound effects and GIF usage (1pt)
-      - Switch forms (1pt)
+   - Add 3 non-standard controls (2pt)
+   - Make controls to interact. At least 3 interactions (1pt) 
+   - Create a custom control (not existent in IDE) (2pt)
+   - Create a _Reset_ button. On clicking this button all controls should go to their default state (1pt)
+   - Set a breakpoint in your application and check variables values at that moment of time (1pt)
+   - _Mention your own tasks that you did and claim points for them_
+     - Sound effects and GIF usage (1pt)
+     - Switch forms (1pt)
+
+     The result of my application:
+     
+     ![screen1](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%232/aliens/main_screen.png)
+
+
+
 
 
 #### Conclusion:
