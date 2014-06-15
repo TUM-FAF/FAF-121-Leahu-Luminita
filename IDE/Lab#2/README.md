@@ -22,14 +22,14 @@
      - Sound effects and GIF usage (1pt)
      - Switch forms (1pt)
 
-     The result of my application:
+     **The result of my application:**
 
        - First form _LogIn_ request with progress bar : 
 
        ![screen](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%232/aliens/logIn.png)
 
        - Second form _MainScreen_ of _Simulatron_ :
-          > the same screen is generated when button _Reset_ is clicked
+      > the same screen is generated when button _Reset_ is clicked
      
        ![screen1](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%232/aliens/main_screen.png)
 
@@ -39,12 +39,19 @@
             - red - high
             - yellow - moderate
             - green - low
-          - in the left corner  - stopwatch,
-          - in the left part of screen - the information about found alien
+          - in the left corner  - the stopwatch
+          - in the left part of the screen - the information about found alien
+          - in the right part of the screen - the information about nr of detected and captured aliens
 
+       ![screen2](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%232/aliens/alien_red.png)
 
+       - The result shown when button _Capture_ is clicked:
 
+       ![screen3](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%232/aliens/captured.png)
 
+       - The result shown when the user do not click the _Capture_ button:
+
+       ![screen4](https://raw.githubusercontent.com/TUM-FAF/FAF-121-Leahu-Luminita/master/IDE/Lab%232/aliens/alien_escaped.png)
 
 #### Conclusion:
  
