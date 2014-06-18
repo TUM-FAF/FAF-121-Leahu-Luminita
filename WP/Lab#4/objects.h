@@ -4,7 +4,6 @@
 #include <iostream>
 #include <windows.h>
 #include <cmath>
-//Define the timer ID
 #define ID_TIMER 333
 #define VK_UP    0x26
 #define VK_DOWN  0x28
@@ -31,7 +30,7 @@ class Circle : public Objects {
 public:
     Circle(POINT center,const int &speed): Objects(center,speed)
     {
-        cout<<"creation success";
+
     }
     bool Move(const HDC &hdc,const RECT& rect,HBRUSH &hBrush);
 };

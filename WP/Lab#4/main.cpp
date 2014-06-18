@@ -39,7 +39,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     hwnd = CreateWindowEx (
            0,                   /* Extended possibilites for variation */
            szClassName,         /* Classname */
-           "Animations All Over",       /* Title Text */
+           "Lab#4: Animation",       /* Title Text */
            WS_OVERLAPPEDWINDOW, /* default window */
            CW_USEDEFAULT,       /* Windows decides the position */
            CW_USEDEFAULT,       /* where the window ends up on the screen */
@@ -154,6 +154,25 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
             KillTimer(hwnd,ID_TIMER);
             SetTimer(hwnd,ID_TIMER,timerSpeed,NULL);
         break;       // end of case statement
+        }
+
+        case WM_MOUSEWHEEL:
+        {
+            if((short)HIWORD(wParam)<0)
+            {
+                timerSpeed+=10;
+            }
+            else
+            {
+                timerSpeed-=10;
+                if (timerSpeed<0)
+                {
+                    timerSpeed=1;
+                }
+            }
+            KillTimer(hwnd,ID_TIMER);
+            SetTimer(hwnd,ID_TIMER,timerSpeed,NULL);
+        break;
         }
 
         case WM_PAINT:
