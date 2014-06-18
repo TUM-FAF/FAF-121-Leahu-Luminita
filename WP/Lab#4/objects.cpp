@@ -26,7 +26,7 @@ bool Objects::Color(const COLORREF &clr)
     return TRUE;
 }
 
-//The function that redraws the circle in a new position
+//The function that redraws the rect in a new position
 bool Circle::Move(const HDC &hdc, const RECT& rect, HBRUSH &hBrush)
 {
     //The selection of the brush
@@ -68,25 +68,25 @@ bool Objects::Collision(const RECT &rect)
     return TRUE;
 }
 
-//Function that checks if there was a interaction between 2 balls
+//Function that checks if there was a interaction between 2 rect
 bool Interaction(Objects &alfa, Objects &beta) {
 
     float distance;
     POINT totalSpeed;
-    //Checks the distance between the balls
+    //Checks the distance between the rect
     distance = sqrt( pow(alfa.center.x-beta.center.x,2) + pow(alfa.center.y-beta.center.y,2) );
-    //If the distance is smaller than twice the diameter changes direction of the balls
+
     if ( distance < 45 )
     {
-    //Calculates total speed and divides it equaly between the balls
+    //Calculates total speed and divides it equaly between the rect
     totalSpeed.x = (abs(alfa.xSpeed) + abs(beta.xSpeed))/2;
     totalSpeed.y = (abs(alfa.ySpeed) + abs(beta.ySpeed))/2;
 
-    //Gives the balls a new direction and speed
+    //Gives the rect a new direction and rect
     alfa.Accelerate(-alfa.xSpeed*totalSpeed.x/abs(alfa.xSpeed), -alfa.ySpeed*totalSpeed.y/abs(alfa.ySpeed));
     beta.Accelerate(-beta.xSpeed*totalSpeed.x/abs(beta.xSpeed), -beta.ySpeed*totalSpeed.y/abs(beta.ySpeed));
 
-    //Changes the color of one of the balls on interaction in light green
+    //Changes the color of one of the rect on interaction in light green
     alfa.Color(RGB(15,255,50));
     }
 

@@ -78,6 +78,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     static HANDLE hOld;
     // The timer delay and the initial number of objects defined
     static int timerSpeed = 50,numberObjects = 0;
+    static RECT area = {0, 0, 800, 600};
 
     switch (message)                  /* handle the messages */
     {
@@ -132,7 +133,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 case VK_DOWN:
                 {
                     timerSpeed+=10;
-
                 break;
                 }
 
@@ -180,7 +180,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
             //Gets the device contexd handle and the rectangle area of the client
             hdc = BeginPaint(hwnd,&ps);
             GetClientRect(hwnd,&rect);
-            //Checks for interaction between all the objects in the array
+
             for(int i = 0; i<numberObjects-1; i++)
             {
                 for(int j = i+1; j < numberObjects; j++)
