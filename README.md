@@ -11,6 +11,6 @@
 
 ##Contained courses
 
- - WP
- - IDE
+ - [WP](https://github.com/TUM-FAF/FAF-121-Leahu-Luminita/tree/master/WP)
+ - [IDE](https://github.com/TUM-FAF/FAF-121-Leahu-Luminita/tree/master/IDE)
 
