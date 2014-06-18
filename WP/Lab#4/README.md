@@ -26,3 +26,4 @@ The result of my application:
 
 ## Conclusion
 
+This laboratory work was interesting, but I did it in hurry, after DL. This is the reason why is quite similar with other ones.
