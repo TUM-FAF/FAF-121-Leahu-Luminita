@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.converter.conv.Converter">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Centimeters :"
+        android:id="@+id/textCm"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Metres :"
+        android:id="@+id/textM"
+        android:layout_marginTop="58dp"
+        android:phoneNumber="true"
+        android:layout_below="@+id/textCm"
+        android:layout_alignRight="@+id/textCm"
+        android:layout_alignEnd="@+id/textCm" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonConvert"
+        android:text="Convert"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/editM"
+        android:layout_alignRight="@+id/editM"
+        android:layout_alignEnd="@+id/editM"
+        android:layout_alignLeft="@+id/editM"
+        android:layout_alignStart="@+id/editM" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editC"
+        android:text="0"
+        android:layout_above="@+id/textM"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="right" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editM"
+        android:layout_alignBottom="@+id/textM"
+        android:gravity="right"
+        android:layout_alignLeft="@+id/editC"
+        android:layout_alignStart="@+id/editC" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:id="@+id/buttonAbout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notes"
+        android:id="@+id/button2"
+        android:layout_alignTop="@+id/buttonAbout"
+        android:layout_toLeftOf="@+id/buttonAbout" />
+
+</RelativeLayout>
