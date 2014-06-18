@@ -1,14 +1,9 @@
-#include <windows.h>
-#include "resource.h"
+#include "objects.h"
 
-/*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 
-/*  Make the class name into a global variable  */
+static Objects *objects[100];
 char szClassName[ ] = "CodeBlocksWindowsApp";
-void UpdateBall(RECT* prc);
-void DrawBall(HDC hdc, RECT* prc);
-
 
 int WINAPI WinMain (HINSTANCE hThisInstance,
                      HINSTANCE hPrevInstance,
@@ -34,7 +29,7 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
     wincl.cbWndExtra = 0;                      /* structure or the window instance */
     /* Use Windows's default colour as the background of the window */
-    wincl.hbrBackground = (HBRUSH) COLOR_BACKGROUND;
+    wincl.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
 
     /* Register the window class, and if it fails quit the program */
     if (!RegisterClassEx (&wincl))
@@ -44,12 +39,12 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     hwnd = CreateWindowEx (
            0,                   /* Extended possibilites for variation */
            szClassName,         /* Classname */
-           "Code::Blocks Template Windows App",       /* Title Text */
+           "Animations All Over",       /* Title Text */
            WS_OVERLAPPEDWINDOW, /* default window */
            CW_USEDEFAULT,       /* Windows decides the position */
            CW_USEDEFAULT,       /* where the window ends up on the screen */
-           544,                 /* The programs width */
-           375,                 /* and height in pixels */
+           800,                 /* The programs width */
+           600,                 /* and height in pixels */
            HWND_DESKTOP,        /* The window is a child-window to desktop */
            NULL,                /* No menu */
            hThisInstance,       /* Program Instance handler */
@@ -72,111 +67,144 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     return messages.wParam;
 }
 
-
-/*  This function is called by the Windows function DispatchMessage()  */
-
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static HINSTANCE hInstance;
-    static BITMAP bm;
-    static HBITMAP g_hbmBall = NULL;
-
-    g_hbmBall = (HBITMAP)LoadImage(hInstance, "ball.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-    GetObject(g_hbmBall, sizeof(bm), &bm);
-
-    ZeroMemory(&g_ballInfo, sizeof(g_ballInfo));
-    g_ballInfo.width = bm.bmWidth;
-    g_ballInfo.height = bm.bmHeight;
-
-    g_ballInfo.dx = BALL_MOVE_DELTA;
-    g_ballInfo.dy = BALL_MOVE_DELTA;
-
-    const int ID_TIMER = 1;
-
-    int ret = SetTimer(hwnd, ID_TIMER, 50, NULL);
-
-    if(ret == 0)
-    {
-       MessageBox(hwnd, "Could not SetTimer()!", "Error", MB_OK | MB_ICONEXCLAMATION);
-    }
-
+    static HDC hdc,hdcMem;
+    static PAINTSTRUCT ps;
+    static RECT rect;
+    static HBRUSH hBrush;
+    static HBITMAP hbmMem;
+    // A handle to the old memory context
+    static HANDLE hOld;
+    // The timer delay and the initial number of objects defined
+    static int timerSpeed = 50,numberObjects = 0;
 
     switch (message)                  /* handle the messages */
     {
+        case WM_CREATE:
+        {
+          hdc = GetDC(hwnd);
+          GetClientRect(hwnd,&rect);
+          //Generate the buffer memory using a bitmap akin memory data
+          hdcMem = CreateCompatibleDC(hdc);
+          hbmMem = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
+          hOld = SelectObject(hdcMem,hbmMem);
+            //Sets the initial timer
+          SetTimer(hwnd, ID_TIMER, timerSpeed, NULL);
+        break;
+        }
+
+        case WM_SIZE:
+        {
+            //Destroy the double buffer memory and handle
+            SelectObject(hdcMem, hOld);
+            DeleteObject(hbmMem);
+            DeleteDC(hdcMem);
+
+            //Gets device context of the window and the rectangle of the client area
+            hdc = GetDC(hwnd);
+            GetClientRect(hwnd, &rect);
+
+            //Generate the buffer memory using a bitmap akin memory data
+            hdcMem = CreateCompatibleDC(hdc);
+            hbmMem = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
+            hOld = SelectObject(hdcMem, hbmMem);
+        break;
+        }
+
+        case WM_LBUTTONDOWN:
+        {
+            POINT coord;
+            coord.x = LOWORD(lParam);
+            coord.y = HIWORD(lParam);
+
+            objects[numberObjects] = new Circle(coord,2 + coord.x%5);
+            objects[numberObjects] -> Color(RGB(coord.x%255, coord.x%125+coord.y%125, coord.y%255));
+
+            numberObjects++;
+        break;
+        }
+
+         case WM_KEYDOWN:   // keyboard input
+         {
+            switch(wParam)
+            {
+                case VK_DOWN:
+                {
+                    timerSpeed+=10;
+
+                break;
+                }
+
+                case VK_UP:
+                {
+                    timerSpeed-=10;
+
+                        if (timerSpeed < 0)
+                        {
+                            timerSpeed = 1;
+                        }
+                 break;
+                }
+
+                default: return DefWindowProc (hwnd, message, wParam, lParam);
+            break;   // end of switch statement
+            }
+
+            KillTimer(hwnd,ID_TIMER);
+            SetTimer(hwnd,ID_TIMER,timerSpeed,NULL);
+        break;       // end of case statement
+        }
+
+        case WM_PAINT:
+        {
+            //Gets the device contexd handle and the rectangle area of the client
+            hdc = BeginPaint(hwnd,&ps);
+            GetClientRect(hwnd,&rect);
+            //Checks for interaction between all the objects in the array
+            for(int i = 0; i<numberObjects-1; i++)
+            {
+                for(int j = i+1; j < numberObjects; j++)
+                {
+                    Interaction(*objects[i],*objects[j]);
+                }
+            }
+            //Fills the buffer memory background image with white
+            FillRect(hdcMem, &rect,(HBRUSH)GetStockObject(WHITE_BRUSH));
+            //Redraws all the objects in the array
+            for(int i = 0; i < numberObjects; i++)
+            {
+                objects[i] -> Move(hdcMem, rect, hBrush);
+            }
+            //Switches the loaded memory buffer with the display context
+            BitBlt(hdc, 0, 0, rect.right, rect.bottom, hdcMem, 0, 0, SRCCOPY);
+
+            EndPaint(hwnd,&ps);
+
+        break;
+        }
+
         case WM_TIMER:
         {
-            RECT rcClient;
-            HDC hdc = GetDC(hwnd);
-
-            GetClientRect(hwnd, &rcClient);
-            UpdateBall(&rcClient);
-            DrawBall(hdc, &rcClient);
-
-            ReleaseDC(hwnd, hdc);
-        }
+            InvalidateRect(hwnd,NULL,FALSE);
         break;
+        }
 
         case WM_DESTROY:
+        {
+            //Destroy the double buffer memory and handle
+            SelectObject(hdcMem,hOld);
+            DeleteObject(hbmMem);
+            DeleteDC(hdcMem);
+            //Kill the timer
+            KillTimer(hwnd,ID_TIMER);
+
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
-            break;
+        break;
+        }
+
         default:                      /* for messages that we don't deal with */
             return DefWindowProc (hwnd, message, wParam, lParam);
     }
-
     return 0;
-}
-
-void UpdateBall(RECT* prc)
-{
-    g_ballInfo.x += g_ballInfo.dx;
-    g_ballInfo.y += g_ballInfo.dy;
-
-    if(g_ballInfo.x < 0)
-    {
-        g_ballInfo.x = 0;
-        g_ballInfo.dx = BALL_MOVE_DELTA;
-    }
-    else if(g_ballInfo.x + g_ballInfo.width > prc->right)
-    {
-        g_ballInfo.x = prc->right - g_ballInfo.width;
-        g_ballInfo.dx = -BALL_MOVE_DELTA;
-    }
-
-    if(g_ballInfo.y < 0)
-    {
-        g_ballInfo.y = 0;
-        g_ballInfo.dy = BALL_MOVE_DELTA;
-    }
-    else if(g_ballInfo.y + g_ballInfo.height > prc->bottom)
-    {
-        g_ballInfo.y = prc->bottom - g_ballInfo.height;
-        g_ballInfo.dy = -BALL_MOVE_DELTA;
-    }
-}
-
-void DrawBall(HDC hdc, RECT* prc)
-{
-    HDC hdcBuffer = CreateCompatibleDC(hdc);
-    HBITMAP hbmBuffer = CreateCompatibleBitmap(hdc, prc->right, prc->bottom);
-    HBITMAP hbmOldBuffer ;
-    hbmOldBuffer =  SelectObject(hdcBuffer, hbmBuffer);
-
-    HDC hdcMem = CreateCompatibleDC(hdc);
-    HBITMAP hbmOld = SelectObject(hdcMem, g_hbmMask);
-
-    FillRect(hdcBuffer, prc, GetStockObject(WHITE_BRUSH));
-
-    BitBlt(hdcBuffer, g_ballInfo.x, g_ballInfo.y, g_ballInfo.width, g_ballInfo.height, hdcMem, 0, 0, SRCAND);
-
-    SelectObject(hdcMem, g_hbmBall);
-    BitBlt(hdcBuffer, g_ballInfo.x, g_ballInfo.y, g_ballInfo.width, g_ballInfo.height, hdcMem, 0, 0, SRCPAINT);
-
-    BitBlt(hdc, 0, 0, prc->right, prc->bottom, hdcBuffer, 0, 0, SRCCOPY);
-
-    SelectObject(hdcMem, hbmOld);
-    DeleteDC(hdcMem);
-
-    SelectObject(hdcBuffer, hbmOldBuffer);
-    DeleteDC(hdcBuffer);
-    DeleteObject(hbmBuffer);
 }
